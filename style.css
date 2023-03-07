@@ -146,6 +146,7 @@ li {
 
 /*--------------*---------* display Section */
 .display {
+    height: 100%;
     overflow-y: scroll;
 
     display: flex;
