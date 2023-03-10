@@ -1,7 +1,8 @@
 const formInput = document.querySelector('form input');
-const addBtn = document.querySelector('.display__clear');
+const removeBtn = document.querySelector('.display__clear');
 const formField = document.querySelector('form');
-listBtn = document.querySelector('ul');
+const listBtn = document.querySelector('ul');
+
 
 //Add Items
 function appendWord(e) {
@@ -39,13 +40,33 @@ function createIcon(classes) {
 
 // Remove items
 function removeItem(e) {
-    e.target.parentElement.remove();
+    if (e.target.classList.contains('fa-trash-can')) {
+        e.target.parentElement.remove();
+    }
 }
+
+// Clear All
+function clearAll () {
+    while (listBtn.firstChild) {
+        listBtn.removeChild(listBtn.firstChild);            
+    }
+}
+
+
+
+// Update item in the list
+function updateItem(e) {
+    e.target.
+}
+
+
 
 // Initialize elements
 function init() {
     formField.addEventListener('submit', appendWord);
     listBtn.addEventListener('click', removeItem);
+    listBtn.addEventListener('click', updateItem);
+    removeBtn.addEventListener('click', clearAll);
 }
 
 init();
