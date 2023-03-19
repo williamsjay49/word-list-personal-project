@@ -39,6 +39,14 @@ function addItemToDOM(item) {
 }
 
 function addItemToLocalStorage(item) {
+    const itemsFromStorage = getItemsFromStorage();
+    //add new item into storage
+    itemsFromStorage.push(item);
+    
+    localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+}
+
+function getItemsFromStorage () {
     let itemsFromStorage;
     //check if there is any element in the array
     if (localStorage.getItem("items") === null) {
@@ -46,12 +54,17 @@ function addItemToLocalStorage(item) {
     } else {
         itemsFromStorage = (JSON.parse(localStorage.getItem("items")));
     }
-    //add new item into storage
-    itemsFromStorage.push(item);
 
-    localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+    return itemsFromStorage;     
 }
 
+
+function displayItems () {
+    const itemsFromStorage = getItemsFromStorage();
+    itemsFromStorage.forEach(item => addItemToDOM(item));
+
+    checkUi();
+}
 
 function createTextElement(arg) {
     const textElement = document.createElement('h4');
@@ -65,13 +78,31 @@ function createIcon(classes) {
     return icon;
 }
 
-// Remove items
-function removeItem(e) {
+function onClickEdit(e) { 
     if (e.target.classList.contains('fa-trash-can')) {
-        e.target.parentElement.remove();
+        removeItem(e.target);
     }
-
     checkUi();
+}
+
+// Remove items
+function removeItem(item) {
+    if (confirm("Are you sure?")) {
+    //remove item from DOM
+        item.parentElement.remove();
+
+    //remove item from local storage
+    removeItemFromStorage(item.previousElementSibling.textContent);
+    }
+}
+
+function removeItemFromStorage (item) {
+    let itemsFromStorage = getItemsFromStorage();    
+    res = itemsFromStorage.filter(x => x !== item);
+    
+    localStorage.setItem('items', JSON.stringify(res));
+    console.log(res);
+
 }
 
 // Clear All
@@ -79,6 +110,9 @@ function clearAll () {
     while (listBtn.firstChild) {
         listBtn.removeChild(listBtn.firstChild);            
     }
+
+    //remove item from storage
+    localStorage.clear();
 
     checkUi();
 }
@@ -110,9 +144,11 @@ function updateItem() {
 // Initialize elements
 function init() {
     formField.addEventListener('submit', onAddItemSubmit);
-    listBtn.addEventListener('click', removeItem);
+    listBtn.addEventListener('click', onClickEdit);
     // listBtn.addEventListener('click', updateItem);
     removeBtn.addEventListener('click', clearAll);
+    document.addEventListener("DOMContentLoaded", displayItems);
+
     checkUi();
 }
 
