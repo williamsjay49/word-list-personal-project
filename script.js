@@ -3,6 +3,7 @@ const removeBtn = document.querySelector('.display__clear');
 const formField = document.querySelector('form');
 const listBtn = document.querySelector('ul');
 const mainDisplay = document.querySelector('.display');
+let isEditMode = false;
 
 //Add Items
 function onAddItemSubmit(e) {
@@ -81,6 +82,8 @@ function createIcon(classes) {
 function onClickEdit(e) { 
     if (e.target.classList.contains('fa-trash-can')) {
         removeItem(e.target);
+    } else {
+        updateItem(e.target);
     }
     checkUi();
 }
@@ -132,11 +135,16 @@ function checkUi() {
 }
 
 // Update item in the list
-function updateItem() {
-    const currentList = document.querySelectorAll('li');
-    currentList.forEach(e => {
-        console.log(e.target.innerHTML);
-    })
+function updateItem(x) {
+    const listItems = document.querySelectorAll('li');
+    console.log(listItems);
+    isEditMode = true;
+    x.parentElement.classList.add('edit__mode');
+    formInput.value = x.textContent;
+    listItems.forEach(x => x.classList.remove('edit__mode'));
+    console.log(x.parentElement);
+
+
 }
 
 
